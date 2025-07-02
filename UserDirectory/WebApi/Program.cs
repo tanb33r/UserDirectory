@@ -5,6 +5,9 @@ using UserDirectory.Application.Dtos;
 using UserDirectory.Application.Interfaces;
 using UserDirectory.Domain;
 using UserDirectory.Infrastructure.Sql;
+using UserDirectory.Application.Services;
+using UserDirectory.Infrastructure.Sql.Services;
+using UserDirectory.Application.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -13,9 +16,16 @@ var configuration = builder.Configuration;
 builder.Services.AddDbContext<UserDirectoryDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("Sql")));
 
+
+builder.Services.AddAutoMapper(typeof(IUserService).Assembly,
+                               typeof(UserService).Assembly,
+                               typeof(MappingProfile).Assembly);
+
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 
-builder.Services.AddControllers();           // adds API controllers
+builder.Services.AddControllers();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,9 +47,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapGet("/users", async (IUserRepository repo) => await repo.GetAllAsync());
-app.MapGet("/users/{id:int}", async (int id, IUserRepository repo) =>
-    await repo.GetByIdAsync(id) is User user ? Results.Ok(user) : Results.NotFound());
+app.MapControllers();
 
 app.Run();
 
