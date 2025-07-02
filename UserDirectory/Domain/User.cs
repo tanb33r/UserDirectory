@@ -11,6 +11,7 @@ public class User
     public Sex Sex { get; set; }
 
     public Contact Contact { get; set; } = null!;
+    public int RoleId { get; set; }
     public Role Role { get; set; } = null!;
 }
 
