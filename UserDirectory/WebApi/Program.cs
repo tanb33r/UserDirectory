@@ -35,7 +35,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDto>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy => policy.WithOrigins("http://localhost:4200") // update the url as per your need
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                 .AllowCredentials());
+});
+
 var app = builder.Build();
+app.UseCors("CorsPolicy");
+app.UseCors("AllowAngularApp");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
