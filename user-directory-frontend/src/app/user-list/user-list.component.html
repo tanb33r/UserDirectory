@@ -17,17 +17,17 @@
   <div style="flex:1;max-width:400px;">
     <h2>Add User</h2>
     <form (ngSubmit)="createUser()" #userForm="ngForm">
-      <input name="firstName" [(ngModel)]="newUser.firstName" placeholder="First Name" required />
-      <input name="lastName" [(ngModel)]="newUser.lastName" placeholder="Last Name" required />
-      <input name="company" [(ngModel)]="newUser.company" placeholder="Company" required />
-      <input name="sex" [(ngModel)]="newUser.sex" placeholder="Sex" required />
-      <input name="phone" [(ngModel)]="newUser.contact!.phone" placeholder="Phone" required />
-      <input name="address" [(ngModel)]="newUser.contact!.address" placeholder="Address" required />
-      <input name="city" [(ngModel)]="newUser.contact!.city" placeholder="City" required />
-      <input name="country" [(ngModel)]="newUser.contact!.country" placeholder="Country" required />
-      <input name="roleName" [(ngModel)]="newUser.role!.name" placeholder="Role" required />
-      <label><input type="checkbox" name="active" [(ngModel)]="newUser.active" /> Active</label>
-      <button type="submit" [disabled]="userForm.invalid">Create</button>
+      <div class="form-row"><label for="firstName" class="form-label">First Name</label><input id="firstName" name="firstName" [(ngModel)]="newUser.firstName" placeholder="First Name" required class="form-input" /></div>
+      <div class="form-row"><label for="lastName" class="form-label">Last Name</label><input id="lastName" name="lastName" [(ngModel)]="newUser.lastName" placeholder="Last Name" required class="form-input" /></div>
+      <div class="form-row"><label for="company" class="form-label">Company</label><input id="company" name="company" [(ngModel)]="newUser.company" placeholder="Company" required class="form-input" /></div>
+      <div class="form-row"><label for="sex-select" class="form-label">Sex</label><select id="sex-select" name="sex" [(ngModel)]="newUser.sex" required class="form-input"><option value="M">Male</option><option value="F">Female</option></select></div>
+      <div class="form-row"><label for="phone" class="form-label">Phone</label><input id="phone" name="phone" [(ngModel)]="newUser.contact!.phone" placeholder="Phone" required class="form-input" /></div>
+      <div class="form-row"><label for="address" class="form-label">Address</label><input id="address" name="address" [(ngModel)]="newUser.contact!.address" placeholder="Address" required class="form-input" /></div>
+      <div class="form-row"><label for="city" class="form-label">City</label><input id="city" name="city" [(ngModel)]="newUser.contact!.city" placeholder="City" required class="form-input" /></div>
+      <div class="form-row"><label for="country" class="form-label">Country</label><input id="country" name="country" [(ngModel)]="newUser.contact!.country" placeholder="Country" required class="form-input" /></div>
+      <div class="form-row"><label for="role-select" class="form-label">Role</label><select id="role-select" name="roleId" [(ngModel)]="newUser.role!.id" required class="form-input"><option value="" disabled selected>Select Role</option><option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option></select></div>
+      <div class="form-row"><label></label><label><input type="checkbox" name="active" [(ngModel)]="newUser.active" /> Active</label></div>
+      <div class="form-row"><label></label><button type="submit" [disabled]="userForm.invalid">Create</button></div>
     </form>
     <div *ngIf="error" style="color: red">{{ error }}</div>
   </div>

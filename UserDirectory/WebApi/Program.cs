@@ -24,6 +24,7 @@ builder.Services.AddAutoMapper(typeof(IUserService).Assembly,
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddControllers();
 
