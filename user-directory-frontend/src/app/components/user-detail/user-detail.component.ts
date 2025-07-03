@@ -40,8 +40,6 @@ export class UserDetailComponent {
       },
       error: () => {
         this.error = 'Failed to load user';
-        console.log('Failed to load user');
-        this.toastr.error('Failed to load user.');
       }
     });
   }

@@ -1,3 +1,39 @@
+/* User Details View Styling */
+.user-details-view {
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.user-detail-row {
+  display: flex;
+  gap: 0.7rem;
+  align-items: baseline;
+  font-size: 1.08rem;
+  color: #222;
+}
+.user-detail-label {
+  min-width: 90px;
+  font-weight: 500;
+  color: #000000;
+  letter-spacing: 0.01em;
+}
+.user-contact-list {
+  list-style: none;
+  padding: 0 0 0 0.5rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.user-contact-list li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: baseline;
+  font-size: 1.01rem;
+  color: #444;
+}
 /* Modal styles */
 .modal-overlay {
   position: fixed;

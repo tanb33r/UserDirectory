@@ -2,21 +2,23 @@
   <div style="max-width:480px;width:100%;background:#fff;padding:2rem 2.5rem 2rem 2.5rem;border-radius:12px;box-shadow:0 2px 16px 0 rgba(0,0,0,0.07);">
   <button (click)="goBack()">&larr; Back</button>
   <h2 style="text-align:center;margin-bottom:1.5rem;">User Details</h2>
-  <div *ngIf="!isEditing">
-    <div><b>Name:</b> {{ user.firstName }} {{ user.lastName }}</div>
-    <div><b>Company:</b> {{ user.company }}</div>
-    <div><b>Sex:</b> {{ user.sex }}</div>
-    <div><b>Active:</b> {{ user.active ? 'Yes' : 'No' }}</div>
-    <div><b>Role:</b> {{ user.role!.name }}</div>
-    <div><b>Contact:</b></div>
-    <ul>
-      <li><b>Phone:</b> {{ user.contact!.phone }}</li>
-      <li><b>Address:</b> {{ user.contact!.address }}</li>
-      <li><b>City:</b> {{ user.contact!.city }}</li>
-      <li><b>Country:</b> {{ user.contact!.country }}</li>
+  <div *ngIf="!isEditing" class="user-details-view">
+    <div class="user-detail-row"><span class="user-detail-label">Name:</span> <span>{{ user.firstName }} {{ user.lastName }}</span></div>
+    <div class="user-detail-row"><span class="user-detail-label">Company:</span> <span>{{ user.company }}</span></div>
+    <div class="user-detail-row"><span class="user-detail-label">Sex:</span> <span>{{ user.sex }}</span></div>
+    <div class="user-detail-row"><span class="user-detail-label">Active:</span> <span>{{ user.active ? 'Yes' : 'No' }}</span></div>
+    <div class="user-detail-row"><span class="user-detail-label">Role:</span> <span>{{ user.role!.name }}</span></div>
+    <div class="user-detail-row"><span class="user-detail-label">Contact:</span></div>
+    <ul class="user-contact-list">
+      <li><span class="user-detail-label">Phone:</span> <span>{{ user.contact!.phone }}</span></li>
+      <li><span class="user-detail-label">Address:</span> <span>{{ user.contact!.address }}</span></li>
+      <li><span class="user-detail-label">City:</span> <span>{{ user.contact!.city }}</span></li>
+      <li><span class="user-detail-label">Country:</span> <span>{{ user.contact!.country }}</span></li>
     </ul>
-    <button (click)="enableEdit()">Edit</button>
-    <button (click)="confirmDelete()" style="background:#d44131;color:#fff;">Delete</button>
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;">
+      <button (click)="enableEdit()">Edit</button>
+      <button (click)="confirmDelete()" style="background:#d44131;color:#fff;">Delete</button>
+    </div>
   <div *ngIf="showDeleteModal" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-title">Are you sure you want to delete this user?</div>
