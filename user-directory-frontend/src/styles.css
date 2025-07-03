@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+.toast,
+.ngx-toastr,
+.toast-message {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em;
+}

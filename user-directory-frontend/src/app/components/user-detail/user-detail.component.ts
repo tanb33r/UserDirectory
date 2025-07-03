@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService, User } from '../../services/user.service';
@@ -23,7 +24,8 @@ export class UserDetailComponent {
     private userService: UserService,
     private roleService: RoleService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loadUser(id);
@@ -32,8 +34,15 @@ export class UserDetailComponent {
 
   loadUser(id: number) {
     this.userService.getUser(id).subscribe({
-      next: (user) => (this.user = user),
-      error: () => (this.error = 'Failed to load user')
+      next: (user) => {
+        this.user = user;
+        this.error = '';
+      },
+      error: () => {
+        this.error = 'Failed to load user';
+        console.log('Failed to load user');
+        this.toastr.error('Failed to load user.');
+      }
     });
   }
 
@@ -62,8 +71,12 @@ export class UserDetailComponent {
         }
         this.isEditing = false;
         this.error = '';
+        this.toastr.success('User updated successfully!');
       },
-      error: () => (this.error = 'Failed to update user')
+      error: () => {
+        this.error = 'Failed to update user';
+        this.toastr.error('Failed to update user.');
+      }
     });
   }
 
@@ -78,8 +91,14 @@ export class UserDetailComponent {
   deleteUser() {
     if (!this.user) return;
     this.userService.deleteUser(this.user.id).subscribe({
-      next: () => this.goBack(),
-      error: () => (this.error = 'Failed to delete user')
+      next: () => {
+        this.toastr.success('User deleted successfully!');
+        this.goBack();
+      },
+      error: () => {
+        this.error = 'Failed to delete user';
+        this.toastr.error('Failed to delete user.');
+      }
     });
     this.showDeleteModal = false;
   }

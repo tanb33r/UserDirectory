@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -26,7 +27,11 @@ export class UserListComponent {
     role: { id: 0, name: '' },
   };
 
-  constructor(private userService: UserService, private roleService: RoleService) {
+  constructor(
+    private userService: UserService,
+    private roleService: RoleService,
+    private toastr: ToastrService
+  ) {
     this.loadUsers();
     this.loadRoles();
   }
@@ -69,7 +74,6 @@ export class UserListComponent {
       },
       roleId: this.newUser.role?.id || 0
     };
-    console.log('Creating user:', payload);
     this.userService.createUser(payload).subscribe({
       next: (user) => {
         this.loadUsers();
@@ -83,8 +87,12 @@ export class UserListComponent {
           role: { id: 0, name: '' },
         };
         this.error = '';
+        this.toastr.success('User created successfully!');
       },
-      error: (err) => (this.error = 'Failed to create user.'),
+      error: (err) => {
+        this.error = 'Failed to create user.';
+        this.toastr.error('Failed to create user.');
+      },
     });
   }
 }
