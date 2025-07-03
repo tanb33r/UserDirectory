@@ -1,0 +1,49 @@
+<div *ngIf="user; else loading" style="display:flex;justify-content:center;align-items:flex-start;width:100%;min-height:60vh;">
+  <div style="max-width:480px;width:100%;background:#fff;padding:2rem 2.5rem 2rem 2.5rem;border-radius:12px;box-shadow:0 2px 16px 0 rgba(0,0,0,0.07);">
+  <button (click)="goBack()">&larr; Back</button>
+  <h2 style="text-align:center;margin-bottom:1.5rem;">User Details</h2>
+  <div *ngIf="!isEditing">
+    <div><b>Name:</b> {{ user.firstName }} {{ user.lastName }}</div>
+    <div><b>Company:</b> {{ user.company }}</div>
+    <div><b>Sex:</b> {{ user.sex }}</div>
+    <div><b>Active:</b> {{ user.active ? 'Yes' : 'No' }}</div>
+    <div><b>Role:</b> {{ user.role!.name }}</div>
+    <div><b>Contact:</b></div>
+    <ul>
+      <li><b>Phone:</b> {{ user.contact!.phone }}</li>
+      <li><b>Address:</b> {{ user.contact!.address }}</li>
+      <li><b>City:</b> {{ user.contact!.city }}</li>
+      <li><b>Country:</b> {{ user.contact!.country }}</li>
+    </ul>
+    <button (click)="enableEdit()">Edit</button>
+    <button (click)="deleteUser()" style="background:#d44131;color:#fff;">Delete</button>
+  </div>
+  <form *ngIf="isEditing" (ngSubmit)="updateUser()" style="margin-top:1.5rem;">
+    <label>First Name <input [(ngModel)]="user.firstName" name="firstName" required /></label><br />
+    <label>Last Name <input [(ngModel)]="user.lastName" name="lastName" required /></label><br />
+    <label>Company <input [(ngModel)]="user.company" name="company" required /></label><br />
+    <label>Sex
+      <select [(ngModel)]="user.sex" name="sex" required>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+    </label><br />
+    <label>Active <input type="checkbox" [(ngModel)]="user.active" name="active" /></label><br />
+    <label>Role
+      <select [(ngModel)]="user.role.id" name="roleId" required>
+        <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+      </select>
+    </label><br />
+    <label>Phone <input [(ngModel)]="user.contact.phone" name="phone" /></label><br />
+    <label>Address <input [(ngModel)]="user.contact.address" name="address" /></label><br />
+    <label>City <input [(ngModel)]="user.contact.city" name="city" /></label><br />
+    <label>Country <input [(ngModel)]="user.contact.country" name="country" /></label><br />
+    <button type="submit">Update</button>
+    <button type="button" (click)="isEditing=false">Cancel</button>
+  </form>
+  <div *ngIf="error" style="color:red">{{ error }}</div>
+  </div>
+</div>
+<ng-template #loading>
+  <div>Loading user...</div>
+</ng-template>

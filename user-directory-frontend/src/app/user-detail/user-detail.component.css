@@ -1,0 +1,16 @@
+button {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  padding: 0.4rem 1.2rem;
+  border-radius: 4px;
+  border: none;
+  background: #2d3e50;
+  color: #fff;
+  cursor: pointer;
+}
+button[style*='red'] {
+  background: #e74c3c;
+}
+form label {
+  display: block;
+  margin: 0.5rem 0;
+}

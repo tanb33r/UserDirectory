@@ -1,12 +1,24 @@
 <div class="user-list-wrapper">
   <div style="flex:1;max-width:480px;">
     <h2>User List</h2>
-    <ul *ngIf="users.length; else loading">
-      <li *ngFor="let user of users">
-        <b>{{ user.firstName }} {{ user.lastName }}</b> ({{ user.company }}) - {{ user.role.name }}<br />
-        <small>{{ user.contact.phone }}, {{ user.contact.city }}, {{ user.contact.country }}</small>
-      </li>
-    </ul>
+    <table class="user-grid" *ngIf="users.length; else loading">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.company }}</td>
+          <td>{{ user.role.name }}</td>
+          <td><a [routerLink]="['/user', user.id]">Details</a></td>
+        </tr>
+      </tbody>
+    </table>
     <ng-template #loading>
       <div class="loader-wrapper">
         <div class="loader"></div>

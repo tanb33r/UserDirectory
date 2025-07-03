@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { UserService, User } from '../user.service';
 import { RoleService, Role } from '../role.service';
 import { log } from 'console';
@@ -8,7 +9,7 @@ import { log } from 'console';
 @Component({
   selector: 'user-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })

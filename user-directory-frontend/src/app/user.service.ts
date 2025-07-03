@@ -35,4 +35,32 @@ export class UserService {
   createUser(user: Partial<User>): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}/users`, user);
   }
+
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/${id}`);
+  }
+
+  updateUser(user: User): Observable<User> {
+    // Prepare payload to match UpdateUserDto
+    const payload = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      active: user.active,
+      company: user.company,
+      sex: user.sex,
+      contact: {
+        phone: user.contact.phone,
+        address: user.contact.address,
+        city: user.contact.city,
+        country: user.contact.country
+      },
+      roleId: user.role.id
+    };
+    return this.http.put<User>(`${this.apiUrl}/users`, payload);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
+  }
 }

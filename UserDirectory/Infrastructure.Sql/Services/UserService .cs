@@ -46,7 +46,9 @@ public sealed class UserService : IUserService
         var user = await _db.Users
                             .Include(u => u.Contact)
                             .SingleOrDefaultAsync(u => u.Id == dto.Id, ct);
-        if (user is null) return null;
+
+        if (user is null) 
+            return null;
 
         _mapper.Map(dto, user);
         await _db.SaveChangesAsync(ct);

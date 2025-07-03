@@ -1,3 +1,25 @@
+.user-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.user-grid th, .user-grid td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem 1rem;
+  text-align: left;
+}
+.user-grid th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+.user-grid tr:nth-child(even) {
+  background: #fafbfc;
+}
+.user-grid a {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+}
 /* Form row for label-input side by side */
 .form-row {
   display: flex;
