@@ -17,6 +17,7 @@ export class UserDetailComponent {
   roles: Role[] = [];
   error = '';
   isEditing = false;
+  showDeleteModal = false;
 
   constructor(
     private userService: UserService,
@@ -54,12 +55,24 @@ export class UserDetailComponent {
   updateUser() {
     if (!this.user) return;
     this.userService.updateUser(this.user).subscribe({
-      next: () => {
+      next: (updatedUser) => {
+        if (this.user && this.roles.length > 0) {
+          const newRole = this.roles.find(r => r.id === updatedUser!.role.id);
+          if (newRole) this.user.role = { ...newRole };
+        }
         this.isEditing = false;
         this.error = '';
       },
       error: () => (this.error = 'Failed to update user')
     });
+  }
+
+  confirmDelete() {
+    this.showDeleteModal = true;
+  }
+
+  cancelDelete() {
+    this.showDeleteModal = false;
   }
 
   deleteUser() {
@@ -68,5 +81,6 @@ export class UserDetailComponent {
       next: () => this.goBack(),
       error: () => (this.error = 'Failed to delete user')
     });
+    this.showDeleteModal = false;
   }
 }
