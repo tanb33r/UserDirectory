@@ -26,7 +26,7 @@ public record UserDto
 
     public ContactDto Contact { get; init; } = default!;
 
-    public RoleDto Role { get; init; } = default!;
+    public RoleDto Role { get; set; } = default!;
 }
 
 

@@ -1,8 +1,12 @@
 ﻿namespace UserDirectory.Domain;
 
+using MongoDB.Bson.Serialization.Attributes;
+
+[BsonIgnoreExtraElements]
 public class Contact
 {
-    public int Id { get; init; }
+    [BsonElement("Id")]
+    public int Id { get; set; }
     public int UserId { get; set; }
     public User User { get; set; } = null!;
     public string Phone { get; set; } = null!;

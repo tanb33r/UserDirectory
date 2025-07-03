@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { UserService, User } from '../user.service';
-import { RoleService, Role } from '../role.service';
-import { log } from 'console';
+import { UserService, User } from '../../services/user.service';
+import { RoleService, Role } from '../../services/role.service';
 
 @Component({
   selector: 'user-list',
@@ -44,6 +43,8 @@ export class UserListComponent {
       next: (users) => (this.users = users),
       error: (err) => (this.error = ''),
     });
+    console.log('Users loaded:', this.users);
+    console.log('Users loadasdasded:'+ this.users);
   }
 
   createUser() {

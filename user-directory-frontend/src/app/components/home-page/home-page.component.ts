@@ -14,6 +14,6 @@ import { HeaderComponent } from '../header/header.component';
       </div>
     </main>
   `,
-  styleUrls: ['../app.css']
+  styleUrls: ['../../app.css']
 })
 export class HomePageComponent {}

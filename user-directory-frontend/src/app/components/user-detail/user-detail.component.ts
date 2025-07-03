@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService, User } from '../user.service';
-import { RoleService, Role } from '../role.service';
+import { UserService, User } from '../../services/user.service';
+import { RoleService, Role } from '../../services/role.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
