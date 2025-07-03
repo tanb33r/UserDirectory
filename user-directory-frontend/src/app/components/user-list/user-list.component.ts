@@ -13,7 +13,7 @@ import { RoleService, Role } from '../../services/role.service';
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent {
-  users: User[] = [];
+  users: User[] | null = null;
   error = '';
   roles: Role[] = [];
   newUser: Partial<User> = {
@@ -33,23 +33,27 @@ export class UserListComponent {
 
   loadRoles() {
     this.roleService.getRoles().subscribe({
-      next: (roles) => this.roles = roles,
+      next: (roles) => {
+        this.roles = roles;
+        if (roles.length > 0) {
+          this.newUser.role = { ...roles[0] };
+        }
+      },
       error: () => this.roles = []
     });
   }
 
   loadUsers() {
-    this.userService.getUsers().subscribe({
-      next: (users) => (this.users = users),
-      error: (err) => (this.error = ''),
-    });
-    console.log('Users loaded:', this.users);
-    console.log('Users loadasdasded:'+ this.users);
+    this.users = null;
+    this.userService.getUsers()
+      .subscribe({
+        next: (users) => (this.users = users),
+        error: (err) => (this.error = ''),
+      });
   }
 
   createUser() {
     if (!this.newUser.contact) this.newUser.contact = { id: 0, phone: '', address: '', city: '', country: '' };
-    // Prepare payload in backend format
     const contact = this.newUser.contact || { phone: '', address: '', city: '', country: '' };
     const payload: any = {
       firstName: this.newUser.firstName,

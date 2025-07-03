@@ -31,14 +31,12 @@ namespace UserDirectory.Infrastructure.Mongo.Repositories
 
         public async Task<User> CreateAsync(User user, CancellationToken ct = default)
         {
-            // Find max Id in the collection
             var maxUser = await _users.Find(_ => true)
                 .SortByDescending(u => u.Id)
                 .Limit(1)
                 .FirstOrDefaultAsync(ct);
             user.Id = maxUser != null ? maxUser.Id + 1 : 1;
 
-            // Assign max(id)+1 for Contact if present, using all contacts from users
             if (user.Contact != null)
             {
                 var allContacts = await _users.Find(_ => true)
@@ -51,7 +49,7 @@ namespace UserDirectory.Infrastructure.Mongo.Repositories
                     .Max();
                 user.Contact.Id = maxContactId + 1;
             }
-
+            
             await _users.InsertOneAsync(user, cancellationToken: ct);
             return user;
         }

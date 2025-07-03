@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using MongoDB.Driver;
 using UserDirectory.Application.Dtos;
@@ -50,6 +51,7 @@ public sealed class MongoUserService : IUserService
         var user = _mapper.Map<User>(dto);
         var created = await _repo.CreateAsync(user, ct);
         var role = await _roles.Find(r => r.Id == created.RoleId).FirstOrDefaultAsync(ct);
+
         var userDto = _mapper.Map<UserDto>(created);
         userDto.Role = role != null ? new RoleDto { Id = role.Id, Name = role.Name } : null!;
         return userDto;

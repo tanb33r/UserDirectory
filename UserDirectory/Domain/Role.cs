@@ -5,7 +5,6 @@ namespace UserDirectory.Domain;
 [BsonIgnoreExtraElements]
 public class Role
 {
-    [BsonIgnore]
     public int Id { get; set; }
     public string Name { get; set; } = null!;
 }
