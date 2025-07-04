@@ -2,7 +2,18 @@
   <div style="flex:1;max-width:480px;">
     <h2>User List</h2>
     <ng-container *ngIf="users; else loading">
-      <table class="user-grid" *ngIf="users.length > 0; else noUsers">
+        
+      <div *ngIf="pagedUsers.length > 0" class="pagination-controls" style="display:flex;gap:0.5rem;justify-content:center;margin:1rem 0;align-items:center;flex-wrap:wrap;">
+        <label style="font-size:0.98em;">Rows:
+          <select [ngModel]="pageSize" (ngModelChange)="setPageSize($event)" style="margin:0 0.5rem;">
+            <option *ngFor="let size of [5,10,20,50]" [value]="size">{{size}}</option>
+          </select>
+        </label>
+        <button (click)="goToPage(page-1)" [disabled]="page === 1">&laquo; Prev</button>
+        <span style="margin:0 0.5rem;">Page {{page}} of {{totalPages}}</span>
+        <button (click)="goToPage(page+1)" [disabled]="page === totalPages">Next &raquo;</button>
+      </div>
+      <table class="user-grid" *ngIf="pagedUsers.length > 0; else noUsers">
         <thead>
           <tr>
             <th>Name</th>
@@ -12,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users">
+          <tr *ngFor="let user of pagedUsers">
             <td>{{ user.firstName }} {{ user.lastName }}</td>
             <td>{{ user.company }}</td>
             <td>{{ user.role.name || 'No Role' }}</td>
@@ -34,14 +45,14 @@
   <div style="flex:1;max-width:400px;">
     <h2>Add User</h2>
     <form (ngSubmit)="createUser()" #userForm="ngForm">
-      <div class="form-row"><label for="firstName" class="form-label">First Name</label><input id="firstName" name="firstName" [(ngModel)]="newUser.firstName" placeholder="First Name" required class="form-input" /></div>
-      <div class="form-row"><label for="lastName" class="form-label">Last Name</label><input id="lastName" name="lastName" [(ngModel)]="newUser.lastName" placeholder="Last Name" required class="form-input" /></div>
-      <div class="form-row"><label for="company" class="form-label">Company</label><input id="company" name="company" [(ngModel)]="newUser.company" placeholder="Company" required class="form-input" /></div>
+      <div class="form-row"><label for="firstName" class="form-label">First Name</label><input id="firstName" name="firstName" [(ngModel)]="newUser.firstName" placeholder="First Name" required class="form-input" maxlength="50" /></div>
+      <div class="form-row"><label for="lastName" class="form-label">Last Name</label><input id="lastName" name="lastName" [(ngModel)]="newUser.lastName" placeholder="Last Name" required class="form-input" maxlength="50" /></div>
+      <div class="form-row"><label for="company" class="form-label">Company</label><input id="company" name="company" [(ngModel)]="newUser.company" placeholder="Company" required class="form-input" maxlength="50" /></div>
       <div class="form-row"><label for="sex-select" class="form-label">Sex</label><select id="sex-select" name="sex" [(ngModel)]="newUser.sex" required class="form-input"><option value="M">Male</option><option value="F">Female</option></select></div>
       <div class="form-row"><label for="phone" class="form-label">Phone</label><input id="phone" name="phone" [(ngModel)]="newUser.contact!.phone" placeholder="Phone" required class="form-input" /></div>
-      <div class="form-row"><label for="address" class="form-label">Address</label><input id="address" name="address" [(ngModel)]="newUser.contact!.address" placeholder="Address" required class="form-input" /></div>
-      <div class="form-row"><label for="city" class="form-label">City</label><input id="city" name="city" [(ngModel)]="newUser.contact!.city" placeholder="City" required class="form-input" /></div>
-      <div class="form-row"><label for="country" class="form-label">Country</label><input id="country" name="country" [(ngModel)]="newUser.contact!.country" placeholder="Country" required class="form-input" /></div>
+      <div class="form-row"><label for="address" class="form-label">Address</label><input id="address" name="address" [(ngModel)]="newUser.contact!.address" placeholder="Address" required class="form-input" maxlength="50" /></div>
+      <div class="form-row"><label for="city" class="form-label">City</label><input id="city" name="city" [(ngModel)]="newUser.contact!.city" placeholder="City" required class="form-input" maxlength="50" /></div>
+      <div class="form-row"><label for="country" class="form-label">Country</label><input id="country" name="country" [(ngModel)]="newUser.contact!.country" placeholder="Country" required class="form-input" maxlength="50" /></div>
       <div class="form-row"><label for="role-select" class="form-label">Role</label><select id="role-select" name="roleId" [(ngModel)]="newUser.role!.id" required class="form-input"><option value="" disabled selected>Select Role</option><option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option></select></div>
       <div class="form-row"><label></label><label><input type="checkbox" name="active" [(ngModel)]="newUser.active" /> Active</label></div>
       <div class="form-row"><label></label><button type="submit" [disabled]="userForm.invalid">Create</button></div>

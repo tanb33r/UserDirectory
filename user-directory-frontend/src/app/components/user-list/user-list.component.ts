@@ -15,6 +15,10 @@ import { RoleService, Role } from '../../services/role.service';
 })
 export class UserListComponent {
   users: User[] | null = null;
+  pagedUsers: User[] = [];
+  page = 1;
+  pageSize = 5;
+  totalPages = 1;
   error = '';
   roles: Role[] = [];
   newUser: Partial<User> = {
@@ -52,9 +56,36 @@ export class UserListComponent {
     this.users = null;
     this.userService.getUsers()
       .subscribe({
-        next: (users) => (this.users = users),
+        next: (users) => {
+          this.users = users;
+          this.page = 1;
+          this.updatePagedUsers();
+        },
         error: (err) => (this.error = ''),
       });
+  }
+
+  updatePagedUsers() {
+    if (!this.users) {
+      this.pagedUsers = [];
+      this.totalPages = 1;
+      return;
+    }
+    this.totalPages = Math.max(1, Math.ceil(this.users.length / this.pageSize));
+    const start = (this.page - 1) * this.pageSize;
+    this.pagedUsers = this.users.slice(start, start + this.pageSize);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.page = page;
+    this.updatePagedUsers();
+  }
+
+  setPageSize(size: number) {
+    this.pageSize = size;
+    this.page = 1;
+    this.updatePagedUsers();
   }
 
   createUser() {
