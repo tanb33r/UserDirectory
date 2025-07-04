@@ -23,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\UserDirectory.Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Sql\UserDirectory.Infrastructure.Sql.csproj" />
-    <ProjectReference Include="..\Infrastructure.Json\UserDirectory.Infrastructure.Json.csproj" />
     <ProjectReference Include="..\Infrastructure.Mongo\UserDirectory.Infrastructure.Mongo.csproj" />
   </ItemGroup>
 
