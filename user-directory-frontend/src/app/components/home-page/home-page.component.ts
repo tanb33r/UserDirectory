@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UserListComponent } from '../user-list/user-list.component';
 import { HeaderComponent } from '../header/header.component';
 
@@ -7,7 +7,7 @@ import { HeaderComponent } from '../header/header.component';
   standalone: true,
   imports: [UserListComponent, HeaderComponent],
   template: `
-    <app-header (dataSourceChange)="userList.loadUsers()"></app-header>
+    <app-header (dataSourceChange)="onDataSourceChange($event)"></app-header>
     <main class="main">
       <div class="content">
         <user-list #userList></user-list>
@@ -16,4 +16,11 @@ import { HeaderComponent } from '../header/header.component';
   `,
   styleUrls: ['../../app.css']
 })
-export class HomePageComponent {}
+export class HomePageComponent {
+  @ViewChild('userList') userListComponent?: UserListComponent;
+
+  onDataSourceChange(_source: string) {
+    this.userListComponent?.loadUsers();
+    this.userListComponent?.loadRoles();
+  }
+}

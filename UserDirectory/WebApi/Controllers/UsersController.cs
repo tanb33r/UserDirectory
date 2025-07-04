@@ -43,4 +43,8 @@ public class UsersController : ControllerBase
         var removed = await _service.DeleteUserAsync(id);
         return removed ? NoContent() : NotFound();
     }
+
+    [HttpGet("search")]
+    public async Task<IEnumerable<UserDto>> Search([FromQuery] string? q)
+    => await _service.SearchUsersAsync(q);
 }

@@ -62,4 +62,8 @@ export class UserService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${API_USERS_URL}/${id}`);
   }
+  
+  searchUsers(query: string): Observable<User[]> {
+    return this.http.get<User[]>(`${API_USERS_URL}/search`, { params: { q: query } });
+  }
 }

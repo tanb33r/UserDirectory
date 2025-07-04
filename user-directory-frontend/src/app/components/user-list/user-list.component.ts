@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UserService, User } from '../../services/user.service';
 import { RoleService, Role } from '../../services/role.service';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'user-list',
@@ -13,11 +15,46 @@ import { RoleService, Role } from '../../services/role.service';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })
-export class UserListComponent {
+export class UserListComponent implements OnInit {
+  searchTerm$ = new Subject<string>();
+  searchValue = '';
+  
+  ngOnInit() {
+    this.searchTerm$.pipe(debounceTime(1000)).subscribe(term => {
+      this.searchUsers(term);
+    });
+  }
+
+  onSearchInput(value: string) {
+    this.searchValue = value;
+    this.searchTerm$.next(value);
+  }
+
+  onSearchClick() {
+    this.searchUsers(this.searchValue);
+  }
+
+  searchUsers(term: string) {
+    if (!term || !term.trim()) {
+      this.loadUsers();
+      return;
+    }
+    this.userService.searchUsers(term).subscribe({
+      next: users => {
+        this.users = users;
+        this.page = 1;
+        this.updatePagedUsers();
+      },
+      error: () => {
+        this.users = [];
+        this.updatePagedUsers();
+      }
+    });
+  }
   users: User[] | null = null;
   pagedUsers: User[] = [];
   page = 1;
-  pageSize = 5;
+  pageSize = 10;
   totalPages = 1;
   error = '';
   roles: Role[] = [];

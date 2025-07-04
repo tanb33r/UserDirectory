@@ -67,4 +67,23 @@ public sealed class UserService : IUserService
         await _db.SaveChangesAsync(ct);
         return true;
     }
+    public async Task<IEnumerable<UserDto>> SearchUsersAsync(string? search, CancellationToken ct = default)
+    {
+        var query = _db.Users
+            .Include(u => u.Contact)
+            .Include(u => u.Role)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var lowered = search.Replace(" ", "").ToLower();
+            query = query.Where(u =>
+                u.FirstName.ToLower().Contains(lowered) ||
+                u.LastName.ToLower().Contains(lowered) ||
+                (u.FirstName + u.LastName).ToLower().Contains(lowered)
+            );
+        }
+
+        return await query.ProjectTo<UserDto>(_mapper.ConfigurationProvider).ToListAsync(ct);
+    }
 }

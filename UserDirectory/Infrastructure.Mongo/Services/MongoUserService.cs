@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using AutoMapper;
 using MongoDB.Driver;
 using UserDirectory.Application.Dtos;
@@ -71,5 +70,26 @@ public sealed class MongoUserService : IUserService
     {
         await _repo.DeleteAsync(id, ct);
         return true;
+    }
+    public async Task<IEnumerable<UserDto>> SearchUsersAsync(string? search, CancellationToken ct = default)
+    {
+        var users = await _repo.GetAllAsync(ct);
+        var roles = await _roles.Find(_ => true).ToListAsync(ct);
+        IEnumerable<User> filtered = users;
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var lowered = search.Replace(" ", "").ToLower();
+            filtered = users.Where(u =>
+                (!string.IsNullOrEmpty(u.FirstName) && u.FirstName.ToLower().Contains(lowered)) ||
+                (!string.IsNullOrEmpty(u.LastName) && u.LastName.ToLower().Contains(lowered)) ||
+                (!string.IsNullOrEmpty(u.FirstName) && !string.IsNullOrEmpty(u.LastName) && (u.FirstName + u.LastName).ToLower().Contains(lowered))
+            );
+        }
+        return filtered.Select(u => {
+            var dto = _mapper.Map<UserDto>(u);
+            var role = roles.FirstOrDefault(r => r.Id == u.RoleId);
+            dto.Role = role != null ? new RoleDto { Id = role.Id, Name = role.Name } : null!;
+            return dto;
+        });
     }
 }

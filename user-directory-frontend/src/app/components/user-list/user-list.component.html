@@ -1,12 +1,15 @@
 <div class="user-list-wrapper">
-  <div style="flex:1;max-width:480px;">
+  <div style="flex:1;max-width:600px;">
     <h2>User List</h2>
     <ng-container *ngIf="users; else loading">
-        
+      <div style="margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
+        <input type="text" [(ngModel)]="searchValue" (ngModelChange)="onSearchInput($event)" placeholder="Search" style="flex:1;padding:0.5rem;font-size:1em;" />
+        <i (click)="onSearchClick()" class="fa fa-search search-icon-btn" style="font-size:1.15em;color:#555;cursor:pointer;" tabindex="0" title="Search"></i>
+      </div>
       <div *ngIf="pagedUsers.length > 0" class="pagination-controls" style="display:flex;gap:0.5rem;justify-content:center;margin:1rem 0;align-items:center;flex-wrap:wrap;">
         <label style="font-size:0.98em;">Rows:
           <select [ngModel]="pageSize" (ngModelChange)="setPageSize($event)" style="margin:0 0.5rem;">
-            <option *ngFor="let size of [5,10,20,50]" [value]="size">{{size}}</option>
+            <option *ngFor="let size of [10,20,50,100]" [value]="size">{{size}}</option>
           </select>
         </label>
         <button (click)="goToPage(page-1)" [disabled]="page === 1">&laquo; Prev</button>

@@ -224,7 +224,6 @@ button:disabled {
   }
 }
 /* Remove duplicate .user-list-wrapper and form rules */
-/* Add your styles for user-list here */
 ul {
   list-style: none;
   padding: 0;
