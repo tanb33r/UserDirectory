@@ -24,7 +24,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddDbContext<UserDirectoryDbContext>(options =>
-    options.UseSqlServer(configuration.GetConnectionString("Sql")));
+    options.UseSqlServer(configuration.GetConnectionString("MSSMS")));
 
 
 builder.Services.AddAutoMapper(typeof(IUserService).Assembly,

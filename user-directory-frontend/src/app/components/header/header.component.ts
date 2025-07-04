@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { DataSourceService } from '../../services/data-source.service';
 
 import { CommonModule } from '@angular/common';
 @Component({
@@ -16,8 +17,17 @@ export class HeaderComponent {
   selectedSource = 'MSSMS';
   @Output() dataSourceChange = new EventEmitter<string>();
 
+  constructor(private dataSourceService: DataSourceService) {
+    this.dataSourceService.getDataSource().subscribe(ds => {
+      if (ds) this.selectedSource = ds;
+    });
+  }
+
   onSourceChange(event: any) {
-    this.selectedSource = event.target.value;
-    this.dataSourceChange.emit(this.selectedSource);
+    const newSource = event.target.value;
+    this.selectedSource = newSource;
+    this.dataSourceService.setDataSource(newSource).subscribe(() => {
+      this.dataSourceChange.emit(newSource);
+    });
   }
 }

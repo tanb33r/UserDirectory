@@ -7,10 +7,10 @@ import { HeaderComponent } from '../header/header.component';
   standalone: true,
   imports: [UserListComponent, HeaderComponent],
   template: `
-    <app-header></app-header>
+    <app-header (dataSourceChange)="userList.loadUsers()"></app-header>
     <main class="main">
       <div class="content">
-        <user-list></user-list>
+        <user-list #userList></user-list>
       </div>
     </main>
   `,
