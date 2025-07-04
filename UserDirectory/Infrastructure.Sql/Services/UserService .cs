@@ -47,12 +47,16 @@ public sealed class UserService : IUserService
                             .Include(u => u.Contact)
                             .SingleOrDefaultAsync(u => u.Id == dto.Id, ct);
 
-        if (user is null) 
+        if (user is null)
             return null;
 
         _mapper.Map(dto, user);
         await _db.SaveChangesAsync(ct);
-        return _mapper.Map<UserDto>(user);
+
+        var role = await _db.Roles.FirstOrDefaultAsync(r => r.Id == user.RoleId, ct);
+        var userDto = _mapper.Map<UserDto>(user);
+        userDto.Role = role != null ? new RoleDto { Id = role.Id, Name = role.Name } : null!;
+        return userDto;
     }
 
     public async Task<bool> DeleteUserAsync(int id, CancellationToken ct = default)

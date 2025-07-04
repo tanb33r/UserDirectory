@@ -3,9 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using UserDirectory.Application.Dtos;
 using UserDirectory.Application.Interfaces;
-using UserDirectory.Domain;
 using UserDirectory.Infrastructure.Sql;
-using UserDirectory.Infrastructure.Mongo;
 using UserDirectory.Infrastructure.Mongo.Repositories;
 using UserDirectory.Application.Services;
 using UserDirectory.Infrastructure.Sql.Services;
@@ -16,6 +14,14 @@ using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserDirectory.WebApi.Services.IDataSourceContext, UserDirectory.WebApi.Services.DataSourceContext>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddDbContext<UserDirectoryDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("Sql")));
@@ -26,30 +32,47 @@ builder.Services.AddAutoMapper(typeof(IUserService).Assembly,
                                typeof(MappingProfile).Assembly);
 
 
-var dataSource = configuration["DataSource"];
-
-if (dataSource == "NoSql")
+var mongoConn = configuration.GetConnectionString("Mongo");
+var mongoDbName = configuration.GetSection("MongoDb")["DatabaseName"];
+builder.Services.AddSingleton<MongoUserRepositoryAsync>(_ => new MongoUserRepositoryAsync(mongoConn, mongoDbName));
+builder.Services.AddScoped<SqlUserRepository>();
+builder.Services.AddSingleton<MongoUserService>(sp =>
 {
-    var mongoConn = configuration.GetConnectionString("Mongo");
-    var mongoDbName = configuration.GetSection("MongoDb")["DatabaseName"];
+    var repo = sp.GetRequiredService<MongoUserRepositoryAsync>();
+    var mapper = sp.GetRequiredService<IMapper>();
+    return new MongoUserService(repo, mapper, mongoConn, mongoDbName);
+});
+builder.Services.AddScoped<UserService>();
 
-    builder.Services.AddSingleton<IUserService>(sp =>
-    {
-        var repo = sp.GetRequiredService<IUserRepository>();
-        var mapper = sp.GetRequiredService<IMapper>();
-        return new MongoUserService(repo, mapper, mongoConn, mongoDbName);
-    });
-
-    builder.Services.AddSingleton<IUserRepository>(sp =>
-        new MongoUserRepositoryAsync(mongoConn, mongoDbName));
-}
-else
+builder.Services.AddScoped<IUserService>(sp =>
 {
-    builder.Services.AddScoped<IUserService, UserService>();
-    builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
-}
+    var dsCtx = sp.GetRequiredService<UserDirectory.WebApi.Services.IDataSourceContext>();
+    var dataSource = dsCtx.GetCurrentDataSource();
+    if (dataSource == "MongoDB")
+        return sp.GetRequiredService<MongoUserService>();
+    return sp.GetRequiredService<UserService>();
+});
 
-builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserRepository>(sp =>
+{
+    var dsCtx = sp.GetRequiredService<UserDirectory.WebApi.Services.IDataSourceContext>();
+    var dataSource = dsCtx.GetCurrentDataSource();
+    if (dataSource == "MongoDB")
+        return sp.GetRequiredService<MongoUserRepositoryAsync>();
+    return sp.GetRequiredService<SqlUserRepository>();
+});
+
+builder.Services.AddSingleton<MongoRoleService>(_ => new MongoRoleService(mongoConn, mongoDbName));
+builder.Services.AddScoped<RoleService>();
+
+builder.Services.AddScoped<IRoleService>(sp =>
+{
+    var dsCtx = sp.GetRequiredService<UserDirectory.WebApi.Services.IDataSourceContext>();
+    var dataSource = dsCtx.GetCurrentDataSource();
+    if (dataSource == "MongoDB")
+        return sp.GetRequiredService<MongoRoleService>();
+    return sp.GetRequiredService<RoleService>();
+});
 
 builder.Services.AddControllers();
 
@@ -64,17 +87,18 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDto>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp",
-        policy => policy.WithOrigins("http://localhost:4200") // update the url as per your need
+        policy => policy.WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                  .AllowCredentials());
 });
 
+
 var app = builder.Build();
-app.UseCors("CorsPolicy");
+
+app.UseSession();
 app.UseCors("AllowAngularApp");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -83,36 +107,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.MapControllers();
 
 app.Run();
-
-/*
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-var forecast = Enumerable.Range(1, 5).Select(index =>
-    new WeatherForecast
-    (
-        DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        Random.Shared.Next(-20, 55),
-        summaries[Random.Shared.Next(summaries.Length)]
-    ))
-    .ToArray();
-return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
-*/
