@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_DATASOURCE_URL } from './api.config';
 
@@ -7,13 +7,17 @@ import { API_DATASOURCE_URL } from './api.config';
 export class DataSourceService {
   constructor(private http: HttpClient) {}
 
-  setDataSource(source: string): Observable<void> {
-    return this.http.post<void>(API_DATASOURCE_URL, JSON.stringify(source), {
-      headers: { 'Content-Type': 'application/json' }
+  private getHeaders(): HttpHeaders {
+    const dataSource = localStorage.getItem('selectedDataSource') || 'MSSMS';
+    return new HttpHeaders({
+      'X-Data-Source': dataSource
     });
   }
 
   getDataSource(): Observable<string> {
-    return this.http.get(API_DATASOURCE_URL, { responseType: 'text'});
+    return this.http.get(API_DATASOURCE_URL, { 
+      responseType: 'text',
+      headers: this.getHeaders()
+    });
   }
 }
