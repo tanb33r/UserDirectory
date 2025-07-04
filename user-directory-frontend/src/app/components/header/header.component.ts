@@ -10,10 +10,10 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   dataSources = [
-    { label: 'SQL', value: 'default' },
-    { label: 'NoSQL', value: 'alt' }
+    { label: 'MSSMS', value: 'MSSMS' },
+    { label: 'MongoDB', value: 'MongoDB' }
   ];
-  selectedSource = 'default';
+  selectedSource = 'MSSMS';
   @Output() dataSourceChange = new EventEmitter<string>();
 
   onSourceChange(event: any) {
