@@ -6,3 +6,4 @@
 user-directory-frontend/node_modules/
 user-directory-frontend/.angular/
 /node_modules
+/user-directory-frontend/test-results

@@ -223,7 +223,6 @@ button:disabled {
     padding: 0.5rem 0.5rem;
   }
 }
-/* Remove duplicate .user-list-wrapper and form rules */
 ul {
   list-style: none;
   padding: 0;
