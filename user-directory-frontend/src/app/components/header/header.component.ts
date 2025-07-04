@@ -26,6 +26,7 @@ export class HeaderComponent {
   onSourceChange(event: any) {
     const newSource = event.target.value;
     this.selectedSource = newSource;
+    localStorage.setItem('selectedDataSource', newSource);
     this.dataSourceService.setDataSource(newSource).subscribe(() => {
       this.dataSourceChange.emit(newSource);
     });

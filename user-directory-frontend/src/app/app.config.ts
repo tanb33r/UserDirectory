@@ -1,7 +1,8 @@
 
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { DataSourceInterceptor } from './services/data-source.interceptor';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
@@ -14,6 +15,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DataSourceInterceptor,
+      multi: true
+    },
     importProvidersFrom(ToastrModule.forRoot({
       positionClass: 'toast-top-right',
       timeOut: 2500,
