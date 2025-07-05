@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserDirectory.Domain;
 
-namespace UserDirectory.Application.Interfaces;
+namespace UserDirectory.Application.Abstraction.Repositories;
 
 public interface IUserRepository
 {

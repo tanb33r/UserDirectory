@@ -2,16 +2,16 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using UserDirectory.Application.Interfaces;
+using UserDirectory.Application.Abstraction.Repositories;
 using UserDirectory.Domain;
 
 namespace UserDirectory.Infrastructure.Mongo.Repositories
 {
-    public class MongoUserRepositoryAsync : IUserRepository
+    public class MongoUserRepository : IUserRepository
     {
         private readonly IMongoCollection<User> _users;
 
-        public MongoUserRepositoryAsync(string connectionString, string dbName)
+        public MongoUserRepository(string connectionString, string dbName)
         {
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(dbName);

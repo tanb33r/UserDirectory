@@ -3,8 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using UserDirectory.Application.Abstraction.Repositories;
+using UserDirectory.Application.Abstraction.Services;
 using UserDirectory.Application.Dtos;
-using UserDirectory.Application.Interfaces;
 using UserDirectory.Domain;
 
 namespace UserDirectory.Application.Services;

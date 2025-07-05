@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using UserDirectory.Application.Interfaces;
+using UserDirectory.Application.Abstraction.Repositories;
 using UserDirectory.Domain;
 
-namespace UserDirectory.Infrastructure.Sql;
+namespace UserDirectory.Infrastructure.Sql.Repositories;
 
 public class SqlUserRepository : IUserRepository
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UserDirectory.Application.Abstraction.Services;
 using UserDirectory.Application.Dtos;
-using UserDirectory.Application.Services;
 
 namespace UserDirectory.WebApi.Controllers;
 

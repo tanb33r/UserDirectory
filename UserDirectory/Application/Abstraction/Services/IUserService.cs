@@ -1,6 +1,6 @@
 ﻿using UserDirectory.Application.Dtos;
 
-namespace UserDirectory.Application.Services;
+namespace UserDirectory.Application.Abstraction.Services;
 
 public interface IUserService
 {

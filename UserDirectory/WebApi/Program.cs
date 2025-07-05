@@ -2,14 +2,15 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using UserDirectory.Application.Dtos;
-using UserDirectory.Application.Interfaces;
 using UserDirectory.Infrastructure.Sql;
 using UserDirectory.Infrastructure.Mongo.Repositories;
 using UserDirectory.Application.Services;
-using UserDirectory.Infrastructure.Sql.Services;
 using UserDirectory.Application.Mapping;
 using UserDirectory.Infrastructure.Mongo.Services;
 using AutoMapper;
+using UserDirectory.Infrastructure.Sql.Repositories;
+using UserDirectory.Application.Abstraction.Services;
+using UserDirectory.Application.Abstraction.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -30,11 +31,13 @@ builder.Services.AddDbContext<UserDirectoryDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(IUserService).Assembly,
                                typeof(MappingProfile).Assembly);
 
-
 var mongoConn = configuration.GetConnectionString("Mongo");
 var mongoDbName = configuration.GetSection("MongoDb")["DatabaseName"];
-builder.Services.AddSingleton<MongoUserRepositoryAsync>(_ => new MongoUserRepositoryAsync(mongoConn, mongoDbName));
+builder.Services.AddSingleton(_ => new MongoUserRepository(mongoConn, mongoDbName));
 builder.Services.AddScoped<SqlUserRepository>();
+
+builder.Services.AddSingleton(_ => new MongoRoleRepository(mongoConn, mongoDbName));
+builder.Services.AddScoped<SqlRoleRepository>();
 
 //builder.Services.AddScoped<UserService>();
 
@@ -47,20 +50,19 @@ builder.Services.AddScoped<IUserRepository>(sp =>
     var dsCtx = sp.GetRequiredService<UserDirectory.WebApi.Services.IDataSourceContext>();
     var dataSource = dsCtx.GetCurrentDataSource();
     if (dataSource == "MongoDB")
-        return sp.GetRequiredService<MongoUserRepositoryAsync>();
+        return sp.GetRequiredService<MongoUserRepository>();
     return sp.GetRequiredService<SqlUserRepository>();
 });
 
-builder.Services.AddSingleton<MongoRoleService>(_ => new MongoRoleService(mongoConn, mongoDbName));
-builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<IRoleService, DynamicRoleService>();
 
-builder.Services.AddScoped<IRoleService>(sp =>
+builder.Services.AddScoped<IRoleRepository>(sp =>
 {
     var dsCtx = sp.GetRequiredService<UserDirectory.WebApi.Services.IDataSourceContext>();
     var dataSource = dsCtx.GetCurrentDataSource();
     if (dataSource == "MongoDB")
-        return sp.GetRequiredService<MongoRoleService>();
-    return sp.GetRequiredService<RoleService>();
+        return sp.GetRequiredService<MongoRoleRepository>();
+    return sp.GetRequiredService<SqlRoleRepository>();
 });
 
 builder.Services.AddControllers();
