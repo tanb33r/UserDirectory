@@ -67,6 +67,8 @@ export class UserListComponent implements OnInit {
     contact: { id: 0, phone: '', address: '', city: '', country: '' },
     role: { id: 0, name: '' },
   };
+  phonePattern = /^\+?[0-9\-\s]{7,20}$/;
+  phoneError = '';
 
   constructor(
     private userService: UserService,
@@ -128,6 +130,9 @@ export class UserListComponent implements OnInit {
   createUser() {
     if (!this.newUser.contact) this.newUser.contact = { id: 0, phone: '', address: '', city: '', country: '' };
     const contact = this.newUser.contact || { phone: '', address: '', city: '', country: '' };
+    const phoneValid = this.phonePattern.test(contact.phone || '');
+    this.phoneError = phoneValid ? '' : 'Invalid phone number';
+    if (!phoneValid) return;
     const payload: any = {
       firstName: this.newUser.firstName,
       lastName: this.newUser.lastName,

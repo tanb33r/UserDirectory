@@ -19,6 +19,8 @@ export class UserDetailComponent {
   error = '';
   isEditing = false;
   showDeleteModal = false;
+  phonePattern = /^\+?[0-9\-\s]{7,20}$/;
+  phoneError = '';
 
   constructor(
     private userService: UserService,
@@ -109,6 +111,9 @@ export class UserDetailComponent {
   isFormValid(): boolean {
     if (!this.user) return false;
     const u = this.user;
+    const phoneValid = this.phonePattern.test(u.contact.phone || '');
+    console.log(phoneValid);
+    this.phoneError = phoneValid ? '' : 'Invalid phone number';
     return !!(
       u.firstName && u.firstName.trim() &&
       u.lastName && u.lastName.trim() &&
@@ -116,6 +121,7 @@ export class UserDetailComponent {
       u.sex && u.sex.trim() &&
       u.role && u.role.id &&
       u.contact &&
+      phoneValid &&
       u.contact.phone && u.contact.phone.trim() &&
       u.contact.address && u.contact.address.trim() &&
       u.contact.city && u.contact.city.trim() &&

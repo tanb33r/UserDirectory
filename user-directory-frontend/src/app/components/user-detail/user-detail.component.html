@@ -63,6 +63,7 @@
       <label class="form-label">Phone</label>
       <input class="form-input" [(ngModel)]="user.contact.phone" name="phone" maxlength="50" />
     </div>
+    <div *ngIf="phoneError && isEditing" style="color:red;margin-bottom:0.5rem;">{{ phoneError }}</div>
     <div class="form-row">
       <label class="form-label">Address</label>
       <input class="form-input" [(ngModel)]="user.contact.address" name="address" maxlength="50" />

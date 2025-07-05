@@ -53,6 +53,7 @@
       <div class="form-row"><label for="company" class="form-label">Company</label><input id="company" name="company" [(ngModel)]="newUser.company" placeholder="Company" required class="form-input" maxlength="50" /></div>
       <div class="form-row"><label for="sex-select" class="form-label">Sex</label><select id="sex-select" name="sex" [(ngModel)]="newUser.sex" required class="form-input"><option value="M">Male</option><option value="F">Female</option></select></div>
       <div class="form-row"><label for="phone" class="form-label">Phone</label><input id="phone" name="phone" [(ngModel)]="newUser.contact!.phone" placeholder="Phone" required class="form-input" /></div>
+      <div *ngIf="phoneError" style="color:red;margin-bottom:0.5rem;">{{ phoneError }}</div>
       <div class="form-row"><label for="address" class="form-label">Address</label><input id="address" name="address" [(ngModel)]="newUser.contact!.address" placeholder="Address" required class="form-input" maxlength="50" /></div>
       <div class="form-row"><label for="city" class="form-label">City</label><input id="city" name="city" [(ngModel)]="newUser.contact!.city" placeholder="City" required class="form-input" maxlength="50" /></div>
       <div class="form-row"><label for="country" class="form-label">Country</label><input id="country" name="country" [(ngModel)]="newUser.contact!.country" placeholder="Country" required class="form-input" maxlength="50" /></div>
