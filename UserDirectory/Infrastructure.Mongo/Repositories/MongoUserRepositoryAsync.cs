@@ -63,5 +63,36 @@ namespace UserDirectory.Infrastructure.Mongo.Repositories
         {
             await _users.DeleteOneAsync(u => u.Id == id, ct);
         }
+
+        public async Task<IEnumerable<User>> SearchAsync(string? search, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                return await _users.Find(_ => true).ToListAsync(ct);
+            }
+
+            var lowered = search.Replace(" ", "").ToLower();
+
+            // MongoDB does not support string concatenation in queries, so we filter by first and last name in the DB,
+            // then do the concatenation check in memory.
+            var users = await _users.Find(
+                Builders<User>.Filter.Or(
+                    Builders<User>.Filter.Regex(u => u.FirstName, new MongoDB.Bson.BsonRegularExpression(lowered, "i")),
+                    Builders<User>.Filter.Regex(u => u.LastName, new MongoDB.Bson.BsonRegularExpression(lowered, "i"))
+                )
+            ).ToListAsync(ct);
+
+            // In-memory filtering for concatenated names
+            users = users
+                .Where(u =>
+                    (!string.IsNullOrEmpty(u.FirstName) && u.FirstName.Replace(" ", "").ToLower().Contains(lowered)) ||
+                    (!string.IsNullOrEmpty(u.LastName) && u.LastName.Replace(" ", "").ToLower().Contains(lowered)) ||
+                    (!string.IsNullOrEmpty(u.FirstName) && !string.IsNullOrEmpty(u.LastName) &&
+                        (u.FirstName + u.LastName).Replace(" ", "").ToLower().Contains(lowered))
+                )
+                .ToList();
+
+            return users;
+        }
     }
 }

@@ -28,7 +28,6 @@ builder.Services.AddDbContext<UserDirectoryDbContext>(options =>
 
 
 builder.Services.AddAutoMapper(typeof(IUserService).Assembly,
-                               typeof(UserService).Assembly,
                                typeof(MappingProfile).Assembly);
 
 
@@ -36,22 +35,12 @@ var mongoConn = configuration.GetConnectionString("Mongo");
 var mongoDbName = configuration.GetSection("MongoDb")["DatabaseName"];
 builder.Services.AddSingleton<MongoUserRepositoryAsync>(_ => new MongoUserRepositoryAsync(mongoConn, mongoDbName));
 builder.Services.AddScoped<SqlUserRepository>();
-builder.Services.AddSingleton<MongoUserService>(sp =>
-{
-    var repo = sp.GetRequiredService<MongoUserRepositoryAsync>();
-    var mapper = sp.GetRequiredService<IMapper>();
-    return new MongoUserService(repo, mapper, mongoConn, mongoDbName);
-});
-builder.Services.AddScoped<UserService>();
 
-builder.Services.AddScoped<IUserService>(sp =>
-{
-    var dsCtx = sp.GetRequiredService<UserDirectory.WebApi.Services.IDataSourceContext>();
-    var dataSource = dsCtx.GetCurrentDataSource();
-    if (dataSource == "MongoDB")
-        return sp.GetRequiredService<MongoUserService>();
-    return sp.GetRequiredService<UserService>();
-});
+//builder.Services.AddScoped<UserService>();
+
+
+// Register DynamicUserService as the only IUserService
+builder.Services.AddScoped<IUserService, DynamicUserService>();
 
 builder.Services.AddScoped<IUserRepository>(sp =>
 {

@@ -44,7 +44,28 @@ public class SqlUserRepository : IUserRepository
 
     public async Task UpdateAsync(User user, CancellationToken ct = default)
     {
-        _dbContext.Users.Update(user);
+        var existingUser = await _dbContext.Users
+            .Include(u => u.Contact)
+            .FirstOrDefaultAsync(u => u.Id == user.Id, ct);
+
+        if (existingUser == null)
+            throw new InvalidOperationException("User not found");
+
+        existingUser.FirstName = user.FirstName;
+        existingUser.LastName = user.LastName;
+        existingUser.Active = user.Active;
+        existingUser.Company = user.Company;
+        existingUser.Sex = user.Sex;
+        existingUser.RoleId = user.RoleId;
+
+        if (user.Contact != null && existingUser.Contact != null)
+        {
+            existingUser.Contact.Phone = user.Contact.Phone;
+            existingUser.Contact.Address = user.Contact.Address;
+            existingUser.Contact.City = user.Contact.City;
+            existingUser.Contact.Country = user.Contact.Country;
+        }
+
         await _dbContext.SaveChangesAsync(ct);
     }
 
@@ -56,5 +77,25 @@ public class SqlUserRepository : IUserRepository
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync(ct);
         }
+    }
+
+    public async Task<IEnumerable<User>> SearchAsync(string? search, CancellationToken ct = default)
+    {
+        var query = _dbContext.Users
+            .Include(u => u.Contact)
+            .Include(u => u.Role)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var lowered = search.Replace(" ", "").ToLower();
+            query = query.Where(u =>
+                u.FirstName.ToLower().Contains(lowered) ||
+                u.LastName.ToLower().Contains(lowered) ||
+                (u.FirstName + u.LastName).ToLower().Contains(lowered)
+            );
+        }
+
+        return await query.ToListAsync(ct);
     }
 }

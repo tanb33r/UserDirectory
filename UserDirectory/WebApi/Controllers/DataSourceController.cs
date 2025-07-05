@@ -12,13 +12,6 @@ public class DataSourceController : ControllerBase
         _dataSourceContext = dataSourceContext;
     }
 
-    [HttpPost]
-    public IActionResult SetDataSource([FromBody] string dataSource)
-    {
-        _dataSourceContext.SetGlobalDataSource(dataSource);
-        return Ok();
-    }
-
     [HttpGet]
     public ActionResult<string> GetDataSource()
     {

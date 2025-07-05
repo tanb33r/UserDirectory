@@ -5,27 +5,24 @@ namespace UserDirectory.WebApi.Services;
 public interface IDataSourceContext
 {
     string GetCurrentDataSource();
-    void SetGlobalDataSource(string dataSource);
 }
 
 public class DataSourceContext : IDataSourceContext
 {
     private readonly IConfiguration _configuration;
-    private static string? _globalDataSource = null;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public DataSourceContext(IConfiguration configuration)
+    public DataSourceContext(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public string GetCurrentDataSource()
     {
-        _globalDataSource ??= _configuration["DataSource"] ?? "MSSMS";
-        return _globalDataSource!;
-    }
-
-    public void SetGlobalDataSource(string dataSource)
-    {
-        _globalDataSource = dataSource;
+        var headerValue = _httpContextAccessor.HttpContext?.Request.Headers["X-Data-Source"].ToString();
+        if (!string.IsNullOrWhiteSpace(headerValue))
+            return headerValue;
+        return _configuration["DataSource"] ?? "MSSMS";
     }
 }

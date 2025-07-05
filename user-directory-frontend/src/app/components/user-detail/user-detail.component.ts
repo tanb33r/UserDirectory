@@ -38,8 +38,13 @@ export class UserDetailComponent {
         this.user = user;
         this.error = '';
       },
-      error: () => {
-        this.error = 'Failed to load user';
+      error: err => {
+        if (err.status === 404) {
+          this.toastr.warning('User not found.');
+          this.router.navigate(['/']);
+        } else {
+          this.toastr.error('Failed to load user.');
+        }
       }
     });
   }
@@ -99,5 +104,22 @@ export class UserDetailComponent {
       }
     });
     this.showDeleteModal = false;
+  }
+
+  isFormValid(): boolean {
+    if (!this.user) return false;
+    const u = this.user;
+    return !!(
+      u.firstName && u.firstName.trim() &&
+      u.lastName && u.lastName.trim() &&
+      u.company && u.company.trim() &&
+      u.sex && u.sex.trim() &&
+      u.role && u.role.id &&
+      u.contact &&
+      u.contact.phone && u.contact.phone.trim() &&
+      u.contact.address && u.contact.address.trim() &&
+      u.contact.city && u.contact.city.trim() &&
+      u.contact.country && u.contact.country.trim()
+    );
   }
 }

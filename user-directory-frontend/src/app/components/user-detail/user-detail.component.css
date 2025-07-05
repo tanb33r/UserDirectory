@@ -110,6 +110,13 @@ button {
 button[style*='red'] {
   background: #e74c3c;
 }
+button:disabled {
+  background: #b0b0b0 !important;
+  color: #f3f3f3 !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none;
+}
 form {
   margin-top: 1.5rem;
 }

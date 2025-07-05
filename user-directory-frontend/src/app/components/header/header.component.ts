@@ -24,17 +24,13 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize localStorage with default value if not set
-    if (!localStorage.getItem('selectedDataSource')) {
-      localStorage.setItem('selectedDataSource', 'MSSMS');
-    }
-    this.selectedSource = localStorage.getItem('selectedDataSource') || 'MSSMS';
+    localStorage.setItem('selectedDataSource', this.selectedSource);
   }
 
   onSourceChange(event: any) {
     const newSource = event.target.value;
     this.selectedSource = newSource;
     localStorage.setItem('selectedDataSource', newSource);
-    this.dataSourceChange.emit(newSource); // Emit the event to notify parent component
+    this.dataSourceChange.emit(newSource);
   }
 }

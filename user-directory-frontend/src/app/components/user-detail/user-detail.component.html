@@ -32,15 +32,15 @@
   <form *ngIf="isEditing" (ngSubmit)="updateUser()">
     <div class="form-row">
       <label class="form-label">First Name</label>
-      <input class="form-input" [(ngModel)]="user.firstName" name="firstName" required />
+      <input class="form-input" [(ngModel)]="user.firstName" name="firstName" required maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label">Last Name</label>
-      <input class="form-input" [(ngModel)]="user.lastName" name="lastName" required />
+      <input class="form-input" [(ngModel)]="user.lastName" name="lastName" required maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label">Company</label>
-      <input class="form-input" [(ngModel)]="user.company" name="company" required />
+      <input class="form-input" [(ngModel)]="user.company" name="company" required maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label">Sex</label>
@@ -61,23 +61,23 @@
     </div>
     <div class="form-row">
       <label class="form-label">Phone</label>
-      <input class="form-input" [(ngModel)]="user.contact.phone" name="phone" />
+      <input class="form-input" [(ngModel)]="user.contact.phone" name="phone" maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label">Address</label>
-      <input class="form-input" [(ngModel)]="user.contact.address" name="address" />
+      <input class="form-input" [(ngModel)]="user.contact.address" name="address" maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label">City</label>
-      <input class="form-input" [(ngModel)]="user.contact.city" name="city" />
+      <input class="form-input" [(ngModel)]="user.contact.city" name="city" maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label">Country</label>
-      <input class="form-input" [(ngModel)]="user.contact.country" name="country" />
+      <input class="form-input" [(ngModel)]="user.contact.country" name="country" maxlength="50" />
     </div>
     <div class="form-row">
       <label class="form-label"></label>
-      <button type="submit">Update</button>
+      <button type="submit" [disabled]="!isFormValid()">Update</button>
       <button type="button" (click)="isEditing=false">Cancel</button>
     </div>
   </form>

@@ -14,4 +14,5 @@ public interface IUserRepository
     Task<User> CreateAsync(User user, CancellationToken ct = default);
     Task UpdateAsync(User user, CancellationToken ct = default);
     Task DeleteAsync(int id, CancellationToken ct = default);
+    Task<IEnumerable<User>> SearchAsync(string? search, CancellationToken ct = default);
 }
