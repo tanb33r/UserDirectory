@@ -20,14 +20,11 @@ public class UserSearchIntegrationTests : IClassFixture<WebApplicationFactory<Pr
     [Fact]
     public async Task SearchUsers_ReturnsMatchingUsers()
     {
-        // Arrange
         var client = _factory.CreateClient();
         var searchQuery = "Taher";
 
-        // Act
         var response = await client.GetAsync($"/users/search?q={searchQuery}");
 
-        // Assert
         response.EnsureSuccessStatusCode();
         var users = await response.Content.ReadFromJsonAsync<UserDto[]>();
         Assert.NotNull(users);
@@ -37,13 +34,10 @@ public class UserSearchIntegrationTests : IClassFixture<WebApplicationFactory<Pr
     [Fact]
     public async Task SearchUsers_EmptyQuery_ReturnsAllUsers()
     {
-        // Arrange
         var client = _factory.CreateClient();
 
-        // Act
         var response = await client.GetAsync("/users/search");
 
-        // Assert
         response.EnsureSuccessStatusCode();
         var users = await response.Content.ReadFromJsonAsync<UserDto[]>();
         Assert.NotNull(users);
