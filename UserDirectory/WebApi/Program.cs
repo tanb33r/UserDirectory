@@ -6,7 +6,6 @@ using UserDirectory.Infrastructure.Sql;
 using UserDirectory.Infrastructure.Mongo.Repositories;
 using UserDirectory.Application.Services;
 using UserDirectory.Application.Mapping;
-using UserDirectory.Infrastructure.Mongo.Services;
 using AutoMapper;
 using UserDirectory.Infrastructure.Sql.Repositories;
 using UserDirectory.Application.Abstraction.Services;
@@ -39,10 +38,6 @@ builder.Services.AddScoped<SqlUserRepository>();
 builder.Services.AddSingleton(_ => new MongoRoleRepository(mongoConn, mongoDbName));
 builder.Services.AddScoped<SqlRoleRepository>();
 
-//builder.Services.AddScoped<UserService>();
-
-
-// Register DynamicUserService as the only IUserService
 builder.Services.AddScoped<IUserService, DynamicUserService>();
 
 builder.Services.AddScoped<IUserRepository>(sp =>
