@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using UserDirectory.Application.Abstraction.Repositories;
 using UserDirectory.Application.Abstraction.Services;
@@ -25,4 +21,4 @@ public class DynamicRoleService : IRoleService
         var roles = await _roleRepository.GetAllAsync(ct);
         return roles.Select(r => _mapper.Map<RoleDto>(r));
     }
-} 
+}

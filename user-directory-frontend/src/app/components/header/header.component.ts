@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { DataSourceService } from '../../services/data-source.service';
 
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   dataSources = [
     { label: 'MSSMS', value: 'MSSMS' },
     { label: 'MongoDB', value: 'MongoDB' }
@@ -22,10 +22,6 @@ export class HeaderComponent implements OnInit {
     this.dataSourceService.getDataSource().subscribe(ds => {
       if (ds) this.selectedSource = ds;
     });
-  }
-
-  ngOnInit() {
-    localStorage.setItem('selectedDataSource', this.selectedSource);
   }
 
   onSourceChange(event: any) {
