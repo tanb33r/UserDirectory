@@ -1,10 +1,6 @@
-/UserDirectory/.vs
 **/bin/
 **/debug/
 **/obj/
-
-user-directory-frontend/node_modules/
-user-directory-frontend/.angular/
+**/.vs
 /node_modules
 /user-directory-frontend/test-results
-/UserDirectory/WebApi.IntegrationTests/.vs
