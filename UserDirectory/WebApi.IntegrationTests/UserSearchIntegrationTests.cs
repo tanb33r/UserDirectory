@@ -22,7 +22,7 @@ public class UserSearchIntegrationTests : IClassFixture<WebApplicationFactory<Pr
     {
         // Arrange
         var client = _factory.CreateClient();
-        var searchQuery = "john";
+        var searchQuery = "Taher";
 
         // Act
         var response = await client.GetAsync($"/users/search?q={searchQuery}");
@@ -31,7 +31,7 @@ public class UserSearchIntegrationTests : IClassFixture<WebApplicationFactory<Pr
         response.EnsureSuccessStatusCode();
         var users = await response.Content.ReadFromJsonAsync<UserDto[]>();
         Assert.NotNull(users);
-        Assert.Contains(users!, u => (u.FirstName + u.LastName).ToLower().Contains(searchQuery));
+        Assert.Contains(users!, u => (u.FirstName + u.LastName).ToLower().Contains(searchQuery.ToLower()));
     }
 
     [Fact]

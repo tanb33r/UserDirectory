@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserDirectory.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserDirectory.Infrastructure.Mongo", "Infrastructure.Mongo\UserDirectory.Infrastructure.Mongo.csproj", "{AE50E31F-ECD0-4A76-B06D-230AC9268709}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.IntegrationTests", "WebApi.IntegrationTests\WebApi.IntegrationTests.csproj", "{8204567C-F51A-4DA0-9BDC-A26B74800F71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AE50E31F-ECD0-4A76-B06D-230AC9268709}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE50E31F-ECD0-4A76-B06D-230AC9268709}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE50E31F-ECD0-4A76-B06D-230AC9268709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8204567C-F51A-4DA0-9BDC-A26B74800F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8204567C-F51A-4DA0-9BDC-A26B74800F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8204567C-F51A-4DA0-9BDC-A26B74800F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8204567C-F51A-4DA0-9BDC-A26B74800F71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
