@@ -14,7 +14,8 @@ export class HeaderComponent implements OnInit {
     { label: 'MSSMS', value: 'MSSMS' },
     { label: 'MongoDB', value: 'MongoDB' }
   ];
-  selectedSource = 'MSSMS';
+  
+  selectedSource = '';
   @Output() dataSourceChange = new EventEmitter<string>();
 
   constructor(private dataSourceService: DataSourceService) {
