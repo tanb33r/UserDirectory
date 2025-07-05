@@ -15,7 +15,7 @@ namespace UserDirectory.Infrastructure.Mongo.Repositories
         {
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(dbName);
-            _users = database.GetCollection<User>("users2");
+            _users = database.GetCollection<User>("users");
         }
 
         public async Task<IEnumerable<User>> GetAllAsync(CancellationToken ct = default)
